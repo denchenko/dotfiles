@@ -3,6 +3,7 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
+      delay = 500,
       spec = {
         { "<leader>t", group = "test/terminal" },
         { "<leader>d", group = "diagnostics" },
