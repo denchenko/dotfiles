@@ -138,5 +138,9 @@ local function build_go_files()
 end
 vim.keymap.set('n', '<leader>b', build_go_files)
 
--- disable diagnostics, I didn't like them
-vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+-- diagnostics config: no inline text, show as float on hover
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = true,
+  float = { border = "rounded" },
+})

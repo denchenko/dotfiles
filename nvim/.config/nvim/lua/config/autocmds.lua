@@ -92,6 +92,14 @@ vim.api.nvim_create_autocmd('VimLeave', {
   command = [[call chansend(v:stderr, "\033]7;\033\\")]],
 })
 
+-- show diagnostics float on CursorHold
+vim.api.nvim_create_autocmd('CursorHold', {
+  group = vim.api.nvim_create_augroup('DiagnosticFloat', { clear = true }),
+  callback = function()
+    vim.diagnostic.open_float(nil, { focusable = false })
+  end,
+})
+
 -- put quickfix window always to the bottom
 local qfgroup = vim.api.nvim_create_augroup('changeQuickfix', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
