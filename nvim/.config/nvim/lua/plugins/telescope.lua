@@ -15,7 +15,6 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
-      "BurntSushi/ripgrep",
       {
         "nvim-telescope/telescope-live-grep-args.nvim",
         version = "^1.0.0",

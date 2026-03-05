@@ -1,4 +1,10 @@
-local root = string.gsub(vim.fn.system("git rev-parse --show-toplevel"), "\n", "")
+local root = vim.fn.getcwd()
+do
+  local out = vim.fn.system("git rev-parse --show-toplevel")
+  if vim.v.shell_error == 0 then
+    root = string.gsub(out, "\n", "")
+  end
+end
 
 -- Fast saving
 vim.keymap.set('n', '<CR>', ':write!<CR>')
@@ -128,13 +134,30 @@ vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev)
 vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>ds', vim.diagnostic.setqflist)
 
--- vim-go
+-- go build/test-compile
 local function build_go_files()
+  local cmd
   if vim.endswith(vim.api.nvim_buf_get_name(0), "_test.go") then
-    vim.cmd("GoTestCompile")
+    cmd = { "go", "test", "-run", "^$", "./..." }
   else
-    vim.cmd("GoBuild")
+    cmd = { "go", "build", "./..." }
   end
+  vim.fn.jobstart(cmd, {
+    stdout_buffered = true,
+    stderr_buffered = true,
+    on_stderr = function(_, data)
+      if data and data[1] ~= "" then
+        vim.schedule(function() vim.notify(table.concat(data, "\n"), vim.log.levels.ERROR) end)
+      end
+    end,
+    on_exit = function(_, code)
+      vim.schedule(function()
+        if code == 0 then
+          vim.notify("Build succeeded", vim.log.levels.INFO)
+        end
+      end)
+    end,
+  })
 end
 vim.keymap.set('n', '<leader>b', build_go_files)
 

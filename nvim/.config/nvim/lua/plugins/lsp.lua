@@ -4,6 +4,17 @@ return {
     opts = {},
   },
   {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require("lint").linters_by_ft = {
+        go = { "golangcilint" },
+      }
+      vim.keymap.set("n", "<leader>ll", function()
+        require("lint").try_lint()
+      end, { desc = "Lint current file" })
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     event = "BufWritePre",
     opts = {
