@@ -1,10 +1,11 @@
 return {
-  { 'tpope/vim-fugitive' },
+  { 'tpope/vim-fugitive', cmd = { "Git", "G", "Gvdiffsplit" } },
   {
     "NeogitOrg/neogit",
+    cmd = "Neogit",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "sindrets/diffview.nvim",
+      { "sindrets/diffview.nvim", cmd = { "DiffviewOpen", "DiffviewFileHistory" } },
       "nvim-telescope/telescope.nvim",
     },
   },
@@ -29,10 +30,10 @@ return {
             return '<Ignore>'
           end, { buffer = bufnr, expr = true })
 
-          vim.keymap.set('n', '<leader>hp', gs.preview_hunk, opts)
-          vim.keymap.set('n', '<leader>hs', gs.stage_hunk, opts)
-          vim.keymap.set('n', '<leader>hu', gs.undo_stage_hunk, opts)
-          vim.keymap.set('n', '<leader>hb', gs.toggle_current_line_blame, opts)
+          vim.keymap.set('n', '<leader>hp', gs.preview_hunk, { buffer = bufnr, desc = "Preview hunk" })
+          vim.keymap.set('n', '<leader>hs', gs.stage_hunk, { buffer = bufnr, desc = "Stage hunk" })
+          vim.keymap.set('n', '<leader>hu', gs.undo_stage_hunk, { buffer = bufnr, desc = "Undo stage hunk" })
+          vim.keymap.set('n', '<leader>hb', gs.toggle_current_line_blame, { buffer = bufnr, desc = "Toggle line blame" })
         end,
       })
     end,

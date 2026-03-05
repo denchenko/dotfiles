@@ -3,6 +3,7 @@ return {
   {
     'smoka7/hop.nvim',
     version = "*",
+    event = "VeryLazy",
     opts = {
       keys = 'etovxqpdygfblzhckisuran'
     },
@@ -14,6 +15,7 @@ return {
   -- commenting out lines
   {
     "numToStr/Comment.nvim",
+    event = "VeryLazy",
     config = function()
       require('Comment').setup({
         opleader = {
@@ -24,7 +26,7 @@ return {
   },
 
   -- split/join lines
-  { "AndrewRadev/splitjoin.vim" },
+  { "AndrewRadev/splitjoin.vim", event = "VeryLazy" },
 
   -- save my last cursor position
   {
@@ -41,6 +43,7 @@ return {
   -- autopairs
   {
     "windwp/nvim-autopairs",
+    event = "InsertEnter",
     config = function()
       require("nvim-autopairs").setup({
         check_ts = true,
@@ -49,11 +52,12 @@ return {
   },
 
   -- unimpaired
-  { 'tpope/vim-unimpaired' },
+  { 'tpope/vim-unimpaired', event = "VeryLazy" },
 
   -- Alternate between files, such as foo.go and foo_test.go
   {
     "rgroli/other.nvim",
+    cmd = { "A", "AV", "AS" },
     config = function()
       require("other-nvim").setup({
         mappings = {
@@ -91,9 +95,9 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("trouble").setup()
-      vim.keymap.set('n', '<leader>xx', '<cmd>Trouble diagnostics toggle<CR>')
-      vim.keymap.set('n', '<leader>xd', '<cmd>Trouble diagnostics toggle filter.buf=0<CR>')
-      vim.keymap.set('n', '<leader>xq', '<cmd>Trouble qflist toggle<CR>')
+      vim.keymap.set('n', '<leader>xx', '<cmd>Trouble diagnostics toggle<CR>', { desc = "Toggle diagnostics" })
+      vim.keymap.set('n', '<leader>xd', '<cmd>Trouble diagnostics toggle filter.buf=0<CR>', { desc = "Buffer diagnostics" })
+      vim.keymap.set('n', '<leader>xq', '<cmd>Trouble qflist toggle<CR>', { desc = "Toggle quickfix" })
     end,
   },
 

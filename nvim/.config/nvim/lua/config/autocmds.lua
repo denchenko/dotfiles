@@ -41,21 +41,23 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
 
     vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-    vim.keymap.set('n', '<leader>v', "<cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
-    vim.keymap.set('n', '<leader>s', "<cmd>belowright split | lua vim.lsp.buf.definition()<CR>", opts)
+    vim.keymap.set('n', '<leader>v', "<cmd>vsplit | lua vim.lsp.buf.definition()<CR>", { buffer = ev.buf, desc = "Definition in vsplit" })
+    vim.keymap.set('n', '<leader>s', "<cmd>belowright split | lua vim.lsp.buf.definition()<CR>", { buffer = ev.buf, desc = "Definition in split" })
 
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run, opts)
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run, { buffer = ev.buf, desc = "Run code lens" })
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename symbol" })
+    vim.keymap.set({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, { buffer = ev.buf, desc = "Code action" })
   end,
 })
 
 -- automatically resize all vim buffers if I resize the terminal window
-vim.api.nvim_command('autocmd VimResized * wincmd =')
+vim.api.nvim_create_autocmd('VimResized', {
+  command = 'wincmd =',
+})
 
 -- https://github.com/neovim/neovim/issues/21771
 local exitgroup = vim.api.nvim_create_augroup('setDir', { clear = true })
