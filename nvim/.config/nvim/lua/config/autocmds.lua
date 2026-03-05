@@ -4,7 +4,7 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufWinEnter", "TermOpen" }, {
     callback = function(args)
         -- we don't use vim.startswith() and look for test:// because of vim-test
         -- vim-test starts tests in a terminal, which we want to keep in normal mode
-        if vim.endswith(vim.api.nvim_buf_get_name(args.buf), "fish") then
+        if vim.bo[args.buf].buftype == 'terminal' then
             vim.cmd("startinsert")
         end
     end,
@@ -32,27 +32,6 @@ vim.api.nvim_create_autocmd('Filetype', {
   command = 'setlocal noexpandtab tabstop=4 shiftwidth=4'
 })
 
--- Run gofmt/gofmpt, import packages automatically on save
-vim.api.nvim_create_autocmd('BufWritePre', {
-  group = vim.api.nvim_create_augroup('setGoFormatting', { clear = true }),
-  pattern = '*.go',
-  callback = function()
-    local params = vim.lsp.util.make_range_params()
-    params.context = { only = { "source.organizeImports" } }
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 2000)
-    for _, res in pairs(result or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          vim.lsp.util.apply_workspace_edit(r.edit, "utf-16")
-        else
-          vim.lsp.buf.execute_command(r.command)
-        end
-      end
-    end
-
-    vim.lsp.buf.format()
-  end
-})
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer

@@ -4,14 +4,26 @@ return {
     opts = {},
   },
   {
+    "stevearc/conform.nvim",
+    event = "BufWritePre",
+    opts = {
+      formatters_by_ft = {
+        go = { "goimports", "gofumpt" },
+      },
+      format_on_save = {
+        timeout_ms = 2000,
+        lsp_fallback = true,
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function()
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      require("lspconfig").gopls.setup({
+      vim.lsp.config('gopls', {
         capabilities = capabilities,
-        flags = { debounce_text_changes = 200 },
         settings = {
           gopls = {
             usePlaceholders = true,
@@ -49,6 +61,7 @@ return {
           },
         },
       })
+      vim.lsp.enable('gopls')
     end,
   },
 }
